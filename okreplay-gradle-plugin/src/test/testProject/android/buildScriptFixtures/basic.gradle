@@ -1,5 +1,5 @@
 buildscript {
-  ext.VERSION_NAME='1.4.0-SNAPSHOT'
+  ext.VERSION_NAME='1.5.0-SNAPSHOT'
   apply from: "../../../../gradle/dependencies.gradle"
   repositories {
     jcenter()
@@ -8,17 +8,15 @@ buildscript {
 
   dependencies {
     classpath dep.androidPlugin
+    classpath files($PLUGIN_CLASSPATH)
   }
 }
 
-plugins {
-  id 'com.android.application'
-  id 'okreplay'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'okreplay'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
-  buildToolsVersion androidConfig.buildToolsVersion
 
   defaultConfig {
     applicationId "okreplay.testProject.basic"

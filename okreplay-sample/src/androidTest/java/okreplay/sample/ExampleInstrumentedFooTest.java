@@ -1,9 +1,10 @@
 package okreplay.sample;
 
-import android.support.test.espresso.IdlingRegistry;
-import android.support.test.espresso.IdlingResource;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import com.jakewharton.espresso.OkHttp3IdlingResource;
 
@@ -20,15 +21,12 @@ import okreplay.MatchRules;
 import okreplay.OkReplay;
 import okreplay.OkReplayConfig;
 import okreplay.OkReplayRuleChain;
-import okreplay.TapeMode;
 
-import static android.support.test.InstrumentationRegistry.getContext;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 
@@ -37,8 +35,10 @@ public class ExampleInstrumentedFooTest {
   private final DependencyGraph graph = DependencyGraph.Companion.instance();
   private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
+  private final AssetManager assetManager =
+      new AssetManager(InstrumentationRegistry.getContext());
   private final OkReplayConfig configuration = new OkReplayConfig.Builder()
-      .tapeRoot(new AndroidTapeRoot(new AssetManager(getContext()), getClass().getSimpleName()))
+      .tapeRoot(new AndroidTapeRoot(assetManager, getClass().getSimpleName()))
       .defaultMode(TapeMode.READ_WRITE)
       .sslEnabled(true)
       .interceptor(graph.getOkReplayInterceptor())
@@ -60,7 +60,7 @@ public class ExampleInstrumentedFooTest {
   @Test
   @OkReplay
   public void foo() {
-    assertEquals("okreplay.sample", getTargetContext().getPackageName());
+    assertEquals("okreplay.sample", ApplicationProvider.getApplicationContext().getPackageName());
     onView(withId(R.id.navigation_repositories)).perform(click());
     onView(withId(R.id.message)).check(matches(withText(containsString("6502Android"))));
   }

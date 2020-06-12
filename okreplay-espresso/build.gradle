@@ -1,9 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.vanniktech.maven.publish'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
-  buildToolsVersion androidConfig.buildToolsVersion
 
   lintOptions {
     disable 'InvalidPackage'
@@ -26,11 +26,9 @@ android {
 dependencies {
   api project(':okreplay-junit')
   api dep.espresso
+  api dep.androidXTestRules
   implementation dep.kotlinStdLib
-  implementation dep.appcompat
   testImplementation dep.robolectric
   testImplementation dep.truth
   testImplementation dep.mockito
 }
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
